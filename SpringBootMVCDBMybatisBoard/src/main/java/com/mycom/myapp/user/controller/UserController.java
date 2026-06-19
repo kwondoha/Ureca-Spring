@@ -13,16 +13,18 @@ import com.mycom.myapp.user.service.UserService;
 @ResponseBody
 @RequestMapping("/users")
 public class UserController {
-	
-	// 생성자 DI : AutoWired 사용X 
+
+	// 생성자 DI
 	private final UserService userService;
+	
 	public UserController(UserService userService) {
 		this.userService = userService;
 	}
-
+	
 	// 회원 가입
 	@PostMapping("/register")
 	public UserResultDto register(UserDto userDto) {
 		return userService.registerUser(userDto);
 	}
+	
 }

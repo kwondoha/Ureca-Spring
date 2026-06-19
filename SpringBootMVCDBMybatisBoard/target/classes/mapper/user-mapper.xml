@@ -11,4 +11,4 @@
 		           values (#{userName}, #{userPassword}, #{userEmail}, now());
 	</insert>
 
-</mapper> 
+</mapper>  

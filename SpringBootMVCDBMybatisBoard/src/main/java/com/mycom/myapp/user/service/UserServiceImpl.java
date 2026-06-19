@@ -8,7 +8,7 @@ import com.mycom.myapp.user.dto.UserResultDto;
 
 @Service
 public class UserServiceImpl implements UserService{
-
+	
 	// 생성자 DI
 	private final UserDao userDao;
 	
@@ -19,12 +19,12 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public UserResultDto registerUser(UserDto userDto) {
 		UserResultDto userResultDto = new UserResultDto();
-		if (userDao.registerUser(userDto) == 1) {
+		if( userDao.registerUser(userDto) == 1 ) {
 			userResultDto.setResult("success");
-		} else {
+		}else {
 			userResultDto.setResult("fail");
 		}
-		return null;
+		return userResultDto;
 	}
-	 
+
 }

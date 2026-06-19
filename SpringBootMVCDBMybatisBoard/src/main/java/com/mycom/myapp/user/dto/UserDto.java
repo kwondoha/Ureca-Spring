@@ -6,26 +6,22 @@ public class UserDto {
 	private int userSeq;
 	private String userName;
 	private String userPassword;
-	private String userProfileImage;
 	private String userEmail;
+	private String userProfileImage;
 	private Date userRegisterDate;
 	
-
-	public UserDto() {
-		super();
-	}
-
-	public UserDto(int userSeq, String userName, String userPassword, String userProfileImage, String userEmail,
+	public UserDto() {}
+	public UserDto(int userSeq, String userName, String userPassword, String userEmail, String userProfileImage,
 			Date userRegisterDate) {
 		super();
 		this.userSeq = userSeq;
 		this.userName = userName;
 		this.userPassword = userPassword;
-		this.userProfileImage = userProfileImage;
 		this.userEmail = userEmail;
+		this.userProfileImage = userProfileImage;
 		this.userRegisterDate = userRegisterDate;
 	}
-	
+
 	public int getUserSeq() {
 		return userSeq;
 	}
@@ -44,17 +40,17 @@ public class UserDto {
 	public void setUserPassword(String userPassword) {
 		this.userPassword = userPassword;
 	}
-	public String getUserProfileImage() {
-		return userProfileImage;
-	}
-	public void setUserProfileImage(String userProfileImage) {
-		this.userProfileImage = userProfileImage;
-	}
 	public String getUserEmail() {
 		return userEmail;
 	}
 	public void setUserEmail(String userEmail) {
 		this.userEmail = userEmail;
+	}
+	public String getUserProfileImage() {
+		return userProfileImage;
+	}
+	public void setUserProfileImage(String userProfileImage) {
+		this.userProfileImage = userProfileImage;
 	}
 	public Date getUserRegisterDate() {
 		return userRegisterDate;
@@ -63,10 +59,13 @@ public class UserDto {
 		this.userRegisterDate = userRegisterDate;
 	}
 	
+	// toString() 민감한 데이터 출력 X
 	@Override
+//	public String toString() {
+//		return "UserDto [userSeq=" + userSeq + ", userName=" + userName + ", userPassword=" + userPassword
+//				+ ", userProfileImage=" + userProfileImage + ", userRegisterDate=" + userRegisterDate + "]";
+//	}
 	public String toString() {
-		return "UserDto [userSeq=" + userSeq + ", userName=" + userName + ", userPassword=" + userPassword
-				+ ", userProfileImage=" + userProfileImage + ", userEmail=" + userEmail + ", userRegisterDate="
-				+ userRegisterDate + "]";
+		return "UserDto [userSeq=" + userSeq + ", userName=" + userName + ", userProfileImage=" + userProfileImage + ", userRegisterDate=" + userRegisterDate + "]";
 	}
 }
