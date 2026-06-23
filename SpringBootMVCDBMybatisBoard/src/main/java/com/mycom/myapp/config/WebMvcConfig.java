@@ -8,11 +8,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import com.mycom.myapp.common.LoginInterceptor;
 
 @Configuration
-public class WebMvcConfig implements WebMvcConfigurer{
+public class WebMvcConfig implements WebMvcConfigurer {
 
 	@Autowired
 	private LoginInterceptor loginInterceptor;
-	
+
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		
@@ -23,10 +23,11 @@ public class WebMvcConfig implements WebMvcConfigurer{
 				.excludePathPatterns(
 						"/",
 						"/index.html",
-						"/assets/**",
 						"/pages/register", 
+						"/assets/**",
 						"/pages/login",
-						"/auth/login"
+						"/auth/login",
+						"/users/register"
 				);
 		// board, logout 은 로그인되어야 접근 가능
 	}
