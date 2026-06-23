@@ -77,8 +77,106 @@
 		<button type="button" class="btn btn-primary" id="btnInsertPage">글 쓰기</button>
 	</div>	
 	
+	<!-- insert Modal -->
+	<div class="modal fade" id="insertBoardModal" tabindex="-1" aria-labelledby="insertBoardModal" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h1 class="modal-title fs-5">글 쓰기</h1>
+	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	      </div>
+	      <div class="modal-body">
+
+			<div class="mb-3">
+			  <label for="titleInsert" class="form-label">제목</label>
+			  <input type="text" class="form-control" id="titleInsert">
+			</div>
+			<div class="mb-3">
+			  <label for="contentInsert" class="form-label">내용</label>
+			  <textarea class="form-control" id="contentInsert" rows="10"></textarea>
+			</div>
+
+	      </div>
+	      <div class="modal-footer">
+	      	<!-- 입력 유효성 검사 후 창이 자동으로 닫히지 않도록 data-bs-dismis 항목 제거 -->
+	        <button id="btnBoardInsert" type="button" class="btn btn-primary">등록</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
+	<!-- detail Modal -->
+	<div class="modal fade" id="detailBoardModal" tabindex="-1" aria-labelledby="detailBoardModal" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h1 class="modal-title fs-5">글 상세</h1>
+	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	      </div>
+	      <div class="modal-body">
+
+	        <div class="table-responsive">
+	            <table class="table">
+	              <tbody>
+	                <tr><td>글번호</td><td id="boardIdDetail">#</td></tr>
+	                <tr><td>제목</td><td id="titleDetail">#</td></tr>
+	                <tr><td>내용</td><td id="contentDetail">#</td></tr>
+	                <tr><td>작성자</td><td id="userNameDetail">#</td></tr>
+	                <tr><td>작성일시</td><td id="regDtDetail">#</td></tr>
+	                <tr><td>조회수</td><td id="readCountDetail">#</td></tr>
+	              </tbody>
+	            </table>
+	     	</div> 
+
+	      </div>
+	      <div class="modal-footer" id="detailBoardModalFooter">
+	      	<!-- 입력 유효성 검사 후 창이 자동으로 닫히지 않도록 data-bs-dismis 항목 제거 -->
+	        <button id="btnBoardUpdatePage" type="button" class="btn btn-primary">글 수정하기</button>
+	        <button id="btnBoardDeleteConfirm" type="button" class="btn btn-warning">글 삭제하기</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
+	<!-- update Modal -->
+	<div class="modal fade" id="updateBoardModal" tabindex="-1" aria-labelledby="updateBoardModal" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h1 class="modal-title fs-5">글 수정</h1>
+	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	      </div>
+	      <div class="modal-body">
+
+			<div class="mb-3">
+			  <label for="titleUpdate" class="form-label">제목</label>
+			  <input type="text" class="form-control" id="titleUpdate">
+			</div>
+			<div class="mb-3">
+			  <label for="contentUpdate" class="form-label">내용</label>
+			  <textarea class="form-control" id="contentUpdate" rows="10"></textarea>
+			</div>
+
+	      </div>
+	      <div class="modal-footer">
+	      	<!-- 입력 유효성 검사 후 창이 자동으로 닫히지 않도록 data-bs-dismis 항목 제거 -->
+	        <button id="btnBoardUpdate" type="button" class="btn btn-primary">수정</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
+	
 	<script src="/assets/js/util.js"></script>
 	<script>
+		// 좋지 않은 방법
+		// let USER_SEQ = <%= userDto.getUserSeq() %>
+		
+		// 3개 모달
+		const insertModal = new bootstrap.Modal( document.querySelector("#insertBoardModal") );
+		const detailModal = new bootstrap.Modal( document.querySelector("#detailBoardModal") );
+		const updateModal = new bootstrap.Modal( document.querySelector("#updateBoardModal") );
+				
 		let LIST_ROW_COUNT = 10; 	// 화면에 게시글을 몇개 행으로 보여줄 것인가? == limit, Pagination Factor #1
 		let OFFSET = 0;				// 몇개를 건너뛰고 보여줄 것인가?
 		let SEARCH_WORD = '';		// 검색어
@@ -97,15 +195,72 @@
 				SEARCH_WORD = document.querySelector("#inputSearchWord").value;
 				listBoard();
 			}
+			
+			// 글 등록 모달 창 띄우기
+			document.querySelector("#btnInsertPage").onclick = function(){
+				// 입력 항목 초기화
+				document.querySelector("#titleInsert").value = '';				
+				document.querySelector("#contentInsert").value = '';
+				
+				insertModal.show();
+			}
+			
+			// 글 등록 버튼 처리
+			document.querySelector("#btnBoardInsert").onclick = function(){
+				// 유효성 검사
+				if( document.querySelector("#titleInsert").value == '' || document.querySelector("#contentInsert").value == '' ){
+					alert("제목 또는 내용을 모두 입력하세요.");
+					return;
+				}
+				
+				// 등록 요청
+				insertBoard();
+			}
+			
+			// 글 수정 모달 띄우기
+			document.querySelector("#btnBoardUpdatePage").onclick = function(){
+				let boardId = document.querySelector("#detailBoardModal").getAttribute("data-boardId"); // 상세 모달의 boardId 를 가져와서
+				document.querySelector("#updateBoardModal").setAttribute("data-boardId", boardId) // 수정 모달의 boardId 를 담는다.
+				// 상세 모달의 제목, 내용을 수정 모달의 제목, 내용으로 이동
+				document.querySelector("#titleUpdate").value = document.querySelector("#titleDetail").innerHTML;
+				document.querySelector("#contentUpdate").value = document.querySelector("#contentDetail").innerHTML;
+				
+				detailModal.hide();
+				updateModal.show();
+			}
+
+			// 글 수정
+			document.querySelector("#btnBoardUpdate").onclick = function(){
+				// validation check
+				if( document.querySelector("#titleUpdate").value == '' || document.querySelector("#contentUpdate").value == '' ){
+					alert("제목 또는 내용을 모두 입력하세요.");
+					return;
+				}
+				// 수정
+				updateBoard();
+			}	
+
+			// 글 삭제 확인
+			document.querySelector("#btnBoardDeleteConfirm").onclick = function(){
+				// confirm
+				if( confirm("이 글을 삭제할까요?") ){
+					deleteBoard();
+				}
+			}
 		}		
 	
 		
 		// 목록
 		async function listBoard(){
+			let fetchOptions = {
+				headers:{
+					ajax: "true"
+				}
+			}
 			
 			let url = "/boards/list";
 			let urlParams = "?limit=" + LIST_ROW_COUNT + "&offset=" + OFFSET + "&searchWord=" + SEARCH_WORD;
-			let response = await fetch(url + urlParams);
+			let response = await fetch(url + urlParams, fetchOptions);
 			let data = await response.json();
 			
 			console.log(data);		
@@ -115,7 +270,11 @@
 				makeListHtml(data.list);
 				TOTAL_LIST_COUNT = data.count;
 				addPagination();
-			}		
+			} else if( data.result == "login" ){ // json 요청의 응답이 login 일 때 로그인 페이지로 이동
+				window.location.href = "/pages/login"; // 페이지 요청
+			} else if( data.result == "fail" ){ // json 요청의 응답이 fail
+				alert("글 목록 조회 중 오류가 발생했습니다.")
+			}	
 		}
 		
 		function makeListHtml(list){
@@ -169,10 +328,182 @@
 		}		
 		
 		
-		
+		// 상세
 		async function detailBoard(boardId){
-			alert(boardId);
+			let fetchOptions = {
+				headers:{
+					ajax: "true"
+				}
+			}
+						
+			let url = "/boards/detail/" + boardId;
+			let response = await fetch(url, fetchOptions);
+			let data = await response.json();
+
+			console.log(data);		
+
+			if( data.result == "success" ){			
+				// data -> html
+				makeDetailHtml(data.dto);
+			} else if( data.result == "login" ){ // json 요청의 응답이 login 일 때 로그인 페이지로 이동
+				window.location.href = "/pages/login"; // 페이지 요청
+			} else if( data.result == "fail" ){ // json 요청의 응답이 fail
+				alert("글 상세 조회 중 오류가 발생했습니다.")
+			}	
 		}	
+				
+		function makeDetailHtml(dto){
+			console.log(dto);
+			let regDt = new Date(dto.regDt); // "2025-11-11T09:30:05" -> javascript Date 객체			
+			let regDtStr = makeDateStr(regDt.getFullYear(), regDt.getMonth() + 1, regDt.getDate(), '.') + ' ' +
+						   makeTimeStr(regDt.getHours(), regDt.getMinutes(), regDt.getSeconds(), ':');
+			console.log(regDtStr);
+			document.querySelector("#boardIdDetail").innerHTML = "#" + dto.boardId;
+			document.querySelector("#titleDetail").innerHTML = dto.title;
+			document.querySelector("#contentDetail").innerHTML = dto.content;
+			document.querySelector("#userNameDetail").innerHTML = dto.userName;
+			document.querySelector("#regDtDetail").innerHTML = regDtStr;
+			document.querySelector("#readCountDetail").innerHTML = dto.readCount;
+			// 수정, 삭제를 위해 boardId 를 modal 의 속성으로 추가
+			document.querySelector("#detailBoardModal").setAttribute("data-boardId", dto.boardId);
+			
+			// same user
+			if( dto.sameUser ){
+				document.querySelector("#detailBoardModalFooter").style.display = "block";
+			}else{
+				document.querySelector("#detailBoardModalFooter").style.display = "none";
+			}
+			
+			detailModal.show();
+		}
+		
+		document.querySelector("#titleInsert").value = '';				
+		document.querySelector("#contentInsert").value = '';
+		
+		// 등록
+		async function insertBoard(){
+			// post
+			let urlParams = new URLSearchParams({
+				title: document.querySelector("#titleInsert").value,
+				content: document.querySelector("#contentInsert").value
+			});
+			
+			let fetchOptions = {
+				headers:{
+					ajax: "true"
+				},				
+				method: "post",
+				body: urlParams
+			}
+			
+			let url = "/boards/insert";
+			let response = await fetch(url, fetchOptions);
+			let data = await response.json();
+
+			console.log(data);		
+
+			if( data.result == "success" ){			
+				alert("글이 등록되었습니다.");
+				// 목록
+				listBoard();
+			} else if( data.result == "login" ){ // json 요청의 응답이 login 일 때 로그인 페이지로 이동
+				window.location.href = "/pages/login"; // 페이지 요청
+			} else if( data.result == "fail" ){ // json 요청의 응답이 fail
+				alert("글 등록 중 오류가 발생했습니다.")
+			}	
+
+			
+			// 모달 닫기
+			insertModal.hide();
+		}
+		
+		// 수정
+		// post, x-www-urlencoded ( UrlSearchParams 객체)
+		// 등록과 달리, boardId 전달
+		async function updateBoard(){
+			
+			let boardId = document.querySelector("#updateBoardModal").getAttribute("data-boardId");
+			
+			let urlParams = new URLSearchParams({
+				boardId: boardId,
+				title: document.querySelector("#titleUpdate").value,
+				content: document.querySelector("#contentUpdate").value
+			});
+			
+			let fetchOptions = {
+				headers:{
+					ajax: "true"
+				},							
+				method: "post",
+				body: urlParams
+			}
+			
+			let url = "/boards/update"
+			let response = await fetch(url, fetchOptions);
+			let data = await response.json();
+			
+			console.log(data);
+			
+			if( data.result == "success" ){
+				alert("글이 수정되었습니다.");
+				// 목록
+				listBoard();
+			} else if( data.result == "login" ){ // json 요청의 응답이 login 일 때 로그인 페이지로 이동
+				window.location.href = "/pages/login"; // 페이지 요청
+			} else if( data.result == "fail" ){ // json 요청의 응답이 fail
+				alert("글 수정 중 오류가 발생했습니다.")
+			}	
+
+			
+			// 모달 창 닫기
+			updateModal.hide();		
+		}	
+		
+		// 삭제
+		// get
+		// boardId 전달
+		async function deleteBoard(){
+			let fetchOptions = {
+				headers:{
+					ajax: "true"
+				}
+			}
+						
+			let boardId = document.querySelector("#detailBoardModal").getAttribute("data-boardId");
+
+			let url = "/boards/delete/" + boardId
+			let response = await fetch(url, fetchOptions);
+			let data = await response.json();
+			
+			console.log(data);
+			
+			if( data.result == "success" ){
+				alert("글이 삭제되었습니다.");
+				// 작업이 성공했을 때에만 모달을 닫으려면 이곳에서 닫는다.
+				
+				// 목록
+				listBoard();
+			} else if( data.result == "login" ){ // json 요청의 응답이 login 일 때 로그인 페이지로 이동
+				window.location.href = "/pages/login"; // 페이지 요청
+			} else if( data.result == "fail" ){ // json 요청의 응답이 fail
+				alert("글 삭제 중 오류가 발생했습니다.")
+			}	
+
+			
+			// 모달 창 닫기
+			detailModal.hide();		
+		}				
 	</script>	
 </body>
+
+
+
+
+
+
+
+
+
+
+
 </html>
