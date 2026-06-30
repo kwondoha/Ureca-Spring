@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+    <h1>corsTest.html 입니다.</h1>
+    <hr>
+    <button id="btnGetRequest">Get 요청</button>
+    <button id="btnPostRequest">Post 요청</button>
+    <button id="btnPutRequest">Put 요청</button>
+    <button id="btnDeleteRequest">Delete 요청</button>
+    
+<script>
+    window.onload = function(){
+        // 클릭 이벤트 처리
+        document.querySelector("#btnGetRequest").onclick = makeGetRequest;
+        document.querySelector("#btnPostRequest").onclick = makePostRequest;
+        document.querySelector("#btnPutRequest").onclick = makePutRequest;
+        document.querySelector("#btnDeleteRequest").onclick = makeDeleteRequest;
+    }
+    async function makeGetRequest(){
+        let fetchOptions = {
+            method: "get",
+            credentials: "include"
+        }
+        let response = await fetch("http://localhost:8080/cors?param=1", fetchOptions);
+        let data = await response.json();
+        console.log(data);
+    }
+    
+    async function makePostRequest(){
+        let urlParams = new URLSearchParams({
+            param: 2
+        });
+        
+        let fetchOptions = {
+            method: "post",
+            credentials: "include",
+            body: urlParams
+        }
+        
+        let response = await fetch("http://localhost:8080/cors", fetchOptions);
+        let data = await response.json();
+        console.log(data);
+    }
+    
+    async function makePutRequest(){
+        let urlParams = new URLSearchParams({
+            param: 3
+        });
+        
+        let fetchOptions = {
+            method: "put",
+            credentials: "include",
+            body: urlParams
+        }
+        
+        let response = await fetch("http://localhost:8080/cors/123", fetchOptions);
+        let data = await response.json();
+        console.log(data);
+    }
+    
+    async function makeDeleteRequest(){
+        
+        let fetchOptions = {
+            method: "delete",
+            credentials: "include"
+        }
+        
+        let response = await fetch("http://localhost:8080/cors/123", fetchOptions);
+        let data = await response.json();
+        console.log(data);
+    }
+</script> 
+</body>
+</html>
