@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>SPA 예제</title>
+</head>
+<body>
+    <h1>SPA (Single Page Application)</h1>
+    <hr>
+    <a href="#" onclick="show('user'); return false;">회원</a>
+    <a href="#" onclick="show('board'); return false;">게시판</a>
+    <a href="#" onclick="show('content'); return false;">컨텐츠</a>
+    <div id="user">회원 화면</div>
+    <div id="board" style="display:none;">게시판 화면</div>
+    <div id="content" style="display:none;">컨텐츠 화면</div>
+    <script>
+        function show(id) {
+            document.getElementById('user').style.display = 'none';
+            document.getElementById('board').style.display = 'none';
+            document.getElementById('content').style.display = 'none';
+            document.getElementById(id).style.display = 'block';
+        }
+    </script>
+</body>
+</html>
