@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+    <h1>board.html</h1>
+    <hr>
+    <!-- 로그인 여부에 따라 달라지는 UI, 모든 페이지 공통 -->
+    <!-- 로그인 X -->
+    <a href="/login.html" id="linkLogin">Login |</a>
+    <!-- 로그인 O -->
+    <span id="userNameWrapper"><span id="userName"></span> 님 안녕하세요. |</span>
+    <a href="#" id="linkLogout">Logout |</a>
+    <!-- 로그인 상관없이 -->
+    <a href="/board.html">Board</a>   
+
+<script src="/assets/js/common.js"></script>
+<script>
+    window.onload = function(){
+		initUI();
+		
+		// logout
+		document.querySelector("#linkLogout").onclik = logout;
+	}
+</script> 
+</body>
+</html>
