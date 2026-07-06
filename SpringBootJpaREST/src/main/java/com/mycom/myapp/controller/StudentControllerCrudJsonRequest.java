@@ -32,10 +32,10 @@ public class StudentControllerCrudJsonRequest {
 	}
 	
 	// 상세
-	@GetMapping("/students/{id}")
-	public StudentResultDto detailStudent(@PathVariable("id") Integer id){
-		return studentServiceCrud.detailStudent(id);
-	}
+//	@GetMapping("/students/{id}")
+//	public StudentResultDto detailStudent(@PathVariable("id") Integer id){
+//		return studentServiceCrud.detailStudent(id);
+//	}
 	
 	// 등록
 	@PostMapping("/students")
@@ -46,7 +46,7 @@ public class StudentControllerCrudJsonRequest {
 	// 수정
 	@PutMapping("/students/{id}")
 	public StudentResultDto updateStudent(@PathVariable("id") Integer id, @RequestBody StudentDto studentDto){
-		studentDto.setId(id); // StudentDto 객체에 id가 포함될 수는 있지만, 우선순위는 PathVariable의 id로 하고 명시적으로 setId() 호
+		studentDto.setId(id); // StudentDto 객체에 id 가 포함될 수 있지만, 우선 순위는 PathVariable 의 id 로 하고 명시적으로 setId() 호출
 		return studentServiceCrud.updateStudent(studentDto);
 	}
 	
@@ -72,3 +72,21 @@ public class StudentControllerCrudJsonRequest {
 		return studentServiceCrud.listStudent(pageNumber, pageSize);
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

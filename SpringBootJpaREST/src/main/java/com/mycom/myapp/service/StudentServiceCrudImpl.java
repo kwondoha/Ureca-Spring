@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.mycom.myapp.dto.StudentDto;
 import com.mycom.myapp.dto.StudentResultDto;
 import com.mycom.myapp.entity.Student;
+import com.mycom.myapp.exception.StudentNotFoundException;
 import com.mycom.myapp.repository.StudentRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -53,38 +54,61 @@ public class StudentServiceCrudImpl implements StudentServiceCrud{
 		return studentResultDto;
 	}
 
+	// StudentResultDto 를 사용, 만약 사용하지 않은 경우
+	//   1. 리턴 타입을 StudentDto
+	//   2. try-catch 제거
+	//   3. StudentDto 리턴, null 리턴 => 사용자 정의 예외 활용
+//	@Override
+//	public StudentResultDto detailStudent(int id) {
+//		
+//		StudentResultDto studentResultDto = new StudentResultDto();
+//		try {
+//			Optional<Student> optionalStudent = studentRepository.findById(id); // id 에 의한 상세
+//
+//			optionalStudent.ifPresentOrElse(
+//					
+//					student -> {
+//						StudentDto studentDto = StudentDto.builder()
+//								.id(student.getId())
+//								.name(student.getName())
+//								.email(student.getEmail())
+//								.phone(student.getPhone())
+//								.build();	
+//						studentResultDto.setDto(studentDto);
+//						studentResultDto.setResult("success");
+//					},
+//					()->{
+//						studentResultDto.setResult("fail");
+//					}
+//			);
+//
+//		}catch(Exception e) {
+//			e.printStackTrace();
+//			studentResultDto.setResult("fail");
+//		}
+//		
+//		return studentResultDto;
+//	}
+
+	// ~ResultDto 를 사용하지 않는 코드
 	@Override
-	public StudentResultDto detailStudent(int id) {
+	public StudentDto detailStudent(int id) {
+		// 정상적일 때 StudentDto 객체 return
+		// Student 가 없을 때 예외 발생 
+		// Optional 구조 orElseThrow
 		
-		StudentResultDto studentResultDto = new StudentResultDto();
-		try {
-			Optional<Student> optionalStudent = studentRepository.findById(id); // id 에 의한 상세
-
-			optionalStudent.ifPresentOrElse(
-					
-					student -> {
-						StudentDto studentDto = StudentDto.builder()
-								.id(student.getId())
-								.name(student.getName())
-								.email(student.getEmail())
-								.phone(student.getPhone())
-								.build();	
-						studentResultDto.setDto(studentDto);
-						studentResultDto.setResult("success");
-					},
-					()->{
-						studentResultDto.setResult("fail");
-					}
-			);
-
-		}catch(Exception e) {
-			e.printStackTrace();
-			studentResultDto.setResult("fail");
-		}
+		Student student = studentRepository
+							.findById(id)
+							.orElseThrow(() -> new StudentNotFoundException(id)); // id 에 의한 상세
 		
-		return studentResultDto;
+		return StudentDto.builder()
+				.id(student.getId())
+				.name(student.getName())
+				.email(student.getEmail())
+				.phone(student.getPhone())
+				.build();	
 	}
-
+	
 	@Override
 	public StudentResultDto insertStudent(StudentDto studentDto) {
 		

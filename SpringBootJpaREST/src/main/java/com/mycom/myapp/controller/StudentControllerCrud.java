@@ -32,10 +32,10 @@ public class StudentControllerCrud {
 	}
 	
 	// 상세
-	@GetMapping("/students/{id}")
-	public StudentResultDto detailStudent(@PathVariable("id") Integer id){
-		return studentServiceCrud.detailStudent(id);
-	}
+//	@GetMapping("/students/{id}")
+//	public StudentResultDto detailStudent(@PathVariable("id") Integer id){
+//		return studentServiceCrud.detailStudent(id);
+//	}
 	
 	// 등록
 	@PostMapping("/students")

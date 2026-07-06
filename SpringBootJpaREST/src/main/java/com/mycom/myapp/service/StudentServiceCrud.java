@@ -10,7 +10,10 @@ public interface StudentServiceCrud {
 	StudentResultDto listStudent();
 	
 	// 상세
-	StudentResultDto detailStudent(int id);
+//	StudentResultDto detailStudent(int id);
+	
+	// 상세 - StudentDto return
+	StudentDto detailStudent(int id);
 	
 	// 등록
 
