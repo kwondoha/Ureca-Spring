@@ -20,12 +20,13 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/api/json")
 @RequiredArgsConstructor
-public class StudentControllerCrudJsonRequest {
+public class StudentControllerCrudJsonRequest implements StudentControllerCrudJsonRequestSwagger {
 
 	// 생성자 DI with Lombok
 	private final StudentServiceCrud studentServiceCrud;
 	
 	// 목록
+	@Override
 	@GetMapping("/students")
 	public StudentResultDto listStudent(){
 		return studentServiceCrud.listStudent();
@@ -38,6 +39,7 @@ public class StudentControllerCrudJsonRequest {
 //	}
 	
 	// 등록
+	@Override
 	@PostMapping("/students")
 	public StudentResultDto insertStudent(@RequestBody StudentDto studentDto) {
 		return studentServiceCrud.insertStudent(studentDto);
