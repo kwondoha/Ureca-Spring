@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>Insert title here</title>
+</head>
+
+<body>
+	<h1>login.html</h1>
+	<hr>
+	<div>
+		email : <input type="text" name="email" id="email" value="user3@mycom.com">
+	</div>
+	<div>
+		password : <input type="password" name="password" id="password" value="password3">
+	</div>
+	<button id="btnLogin">로그인</button>
+
+	<script>
+		window.onload = function () {
+			document.querySelector("#btnLogin").onclick = login;
+		}
+		async function login() {
+			// parameter, value
+			let email = document.querySelector("#email").value;
+			let password = document.querySelector("#password").value;
+
+			let urlParams = new URLSearchParams({
+				//          email: email,
+				//          password: password
+				email, password  // shorthand property
+			});
+
+			// url
+			let url = "/auth/login";
+
+			// fetch options
+			let fetchOptions = {
+				method: "post",
+				body: urlParams
+			}
+
+			let response = await fetch(url, fetchOptions);
+			let data = await response.json(); // response 에 담긴 json 부분을 javascript object 로 변환
+
+			console.log(data);
+
+			if (data.result == "success") {
+				// session Storage에 로그인 사용자 관련 정보를 저장, 활용
+				// name, email, roles
+				sessionStorage.setItem("name", data.userDto.name);
+				sessionStorage.setItem("email", data.userDto.email);
+				sessionStorage.setItem("roles", JSON.stringify(data.userDto.roles));
+
+				// index.html로 이동
+				window.location.href = "/index.html";
+
+
+
+			} else {
+				alert("로그인 실패");
+			}
+		}
+
+
+
+
+
+
+
+
+
+
+		
+
+
+
+
+	</script>
+</body>
+
+</html>
