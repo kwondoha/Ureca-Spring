@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<!-- 우리의 login.html 을 사용하고, 백엔드에서 csrf 적용할 겨우, 프론트의 login.html 도 대응 코드를 작성해야 한다. -->
+	<h1>JWT login.html 입니다.</h1>	
+	<hr>
+
+	<input type="text" id="username" name="username" value=""><br>
+	<input type="password" id="password" name="password" value="1234"><br>
+	
+	<button id="btnLogin">Login</button>
+
+	<div id="errorMessage" style="color: red; margin-top: 10px;"></div>
+	<script>
+		window.onload = function(){
+			
+			document.querySelector("#btnLogin").onclick = login;
+		}
+		
+		async function login(){
+			
+			let url = "/auth/login";
+			
+			let username = document.querySelector("#username").value;
+			let password = document.querySelector("#password").value;
+			
+			let urlParams = new URLSearchParams({
+				username, password  // javascript es6 shorthand property 문법
+			});
+			
+			let fetchOptions = {
+				method: "post",
+				body: urlParams
+			}
+			
+			let response = await fetch(url, fetchOptions);
+			let data = await response.json();
+			
+			console.log(data);
+			
+			// JWT 응답 확인.
+		}		
+	</script>	
+</body>
+</html>
+

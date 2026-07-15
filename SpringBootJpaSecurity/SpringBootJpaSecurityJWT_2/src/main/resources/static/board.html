@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<!-- 현재 벡엔드의 상태는 form-login + csrf on -->
+<body>
+	<h1>board.html 입니다.</h1>	
+	<hr>
+	<button id="btnLogout">Logout</button>
+
+<script src="/assets/js/common.js"></script>	
+<script>
+	window.onload = function(){
+		getBoardData();
+		
+		document.querySelector("#btnLogout").onclick = csrfLogout
+	}	
+
+	async function getBoardData(){
+		// 백엔드 게시판 데이터 요청 <- csrf 처리 필요
+		let response = await csrfFetch("/api/boards", { 
+			method: "get"
+		});
+		
+		let data = await response.json();
+		console.log(data); // UI 생략
+	}
+</script>	
+</body>
+</html>
