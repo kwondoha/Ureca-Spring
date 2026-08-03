@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>공통코드 사용</title>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f5f5f5;
+        padding: 20px;
+    }
+    
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+    
+    .header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 20px;
+        text-align: center;
+    }
+    
+    .content {
+        padding: 30px;
+    }
+    
+    .code-group {
+        margin-bottom: 30px;
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    
+    .code-group-header {
+        background: #f8f9fa;
+        padding: 15px 20px;
+        border-bottom: 1px solid #e9ecef;
+        font-weight: bold;
+        color: #495057;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .code-group-code {
+        font-size: 0.9em;
+        color: #6c757d;
+        font-weight: normal;
+    }
+    
+    .code-list {
+        padding: 20px;
+    }
+    
+    .code-item {
+        margin-bottom: 12px;
+        padding: 10px;
+        border: 1px solid #e9ecef;
+        border-radius: 6px;
+        background: white;
+        transition: all 0.2s;
+    }
+    
+    .code-item:hover {
+        background: #f8f9fa;
+        border-color: #007bff;
+    }
+    
+    .code-item label {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        font-weight: 500;
+        color: #495057;
+    }
+    
+    .code-item input[type="radio"] {
+        margin-right: 10px;
+        transform: scale(1.2);
+    }
+    
+    .code-item .code-brief {
+        font-size: 0.9em;
+        color: #6c757d;
+        margin-left: 25px;
+        margin-top: 5px;
+    }
+    
+    .btn-group {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid #e9ecef;
+    }
+    
+    .btn {
+        padding: 12px 24px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+        transition: all 0.2s;
+    }
+    
+    .btn-primary {
+        background: #007bff;
+        color: white;
+    }
+    
+    .btn-primary:hover {
+        background: #0056b3;
+    }
+    
+    .btn-secondary {
+        background: #6c757d;
+        color: white;
+    }
+    
+    .btn-secondary:hover {
+        background: #545b62;
+    }
+    
+    .loading {
+        text-align: center;
+        padding: 40px;
+        color: #6c757d;
+        font-style: italic;
+    }
+    
+    .error-message {
+        background: #f8d7da;
+        color: #721c24;
+        padding: 15px;
+        border-radius: 6px;
+        margin: 20px 0;
+        border: 1px solid #f5c6cb;
+    }
+    
+    .result-display {
+        background: #e7f3ff;
+        border: 1px solid #b3d9ff;
+        border-radius: 6px;
+        padding: 15px;
+        margin-top: 20px;
+    }
+    
+    .result-display h4 {
+        color: #0056b3;
+        margin-bottom: 10px;
+    }
+    
+    .result-item {
+        margin: 5px 0;
+        padding: 5px 0;
+        border-bottom: 1px solid #d1ecf1;
+    }
+    
+    .result-item:last-child {
+        border-bottom: none;
+    }
+    
+    .nav-links {
+        text-align: center;
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 1px solid #e9ecef;
+    }
+    
+    .nav-links a {
+        color: #007bff;
+        text-decoration: none;
+        margin: 0 10px;
+        padding: 8px 16px;
+        border: 1px solid #007bff;
+        border-radius: 4px;
+        transition: all 0.2s;
+    }
+    
+    .nav-links a:hover {
+        background: #007bff;
+        color: white;
+    }
+</style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>공통코드 사용</h1>
+            <p>CommonCodeRepository를 활용한 일괄 조회</p>
+        </div>
+        
+        <div class="content">
+            <div id="loadingMessage" class="loading">
+                공통코드를 불러오는 중...
+            </div>
+            
+            <div id="errorMessage" class="error-message" style="display: none;"></div>
+            
+            <div id="codeGroups" style="display: none;">
+                <!-- 그룹코드별 코드 목록이 여기에 동적으로 생성됩니다 -->
+            </div>
+            
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="getSelectedValues()">선택된 값 확인</button>
+                <button class="btn btn-secondary" onclick="reloadCommonCodes()">새로고침</button>
+            </div>
+            
+            <div id="resultDisplay" class="result-display" style="display: none;">
+                <!-- 선택된 값들이 여기에 표시됩니다 -->
+            </div>
+            
+            <div class="nav-links">
+                <a href="codeAdmin.html">관리 화면으로 이동</a>
+            </div>
+        </div>
+    </div>
+
+<script>
+    // ========================================================================
+    // 공통코드 사용 화면
+    // - 관리 화면이 아니라, 업무 화면에서 코드를 "가져다 쓰는" 패턴을 보여 줌
+    // - POST /commoncodes 로 여러 그룹을 한 번에 조회
+    // - 응답 Map 을 그룹별 radio 로 렌더링
+    // ========================================================================
+
+    // 서버에서 받은 Map 전체 보관 (선택값 확인 시 그룹 키 순회에 사용)
+    let commonCodeData = null;
+
+    const $ = (selector) => document.querySelector(selector);
+    const $$ = (selector) => Array.from(document.querySelectorAll(selector));
+    const el = {
+        codeGroups: $('#codeGroups'),
+        resultDisplay: $('#resultDisplay'),
+        loadingMessage: $('#loadingMessage'),
+        errorMessage: $('#errorMessage'),
+    };
+    
+    window.onload = function() {
+        loadCommonCodes();
+    }
+    
+    // POST /commoncodes
+    // Body 예: ["001","002"]
+    // 응답: { result, commonCodeDtoListMap: { "001":[CodeDto...], "002":[...] } }
+    async function loadCommonCodes() {
+        try {
+            showLoading(true);
+            hideError();
+            
+            // 화면에 필요한 그룹코드만 요청 (관리 Admin 에서 미리 등록해 두어야 함)
+            const groupCodes = ['001', '002'];
+            
+            const response = await fetch('/commoncodes', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(groupCodes) // List<String> 로 @RequestBody 바인딩
+            });
+            
+            const data = await response.json();
+            
+            if (data.result === "success") {
+                commonCodeData = data.commonCodeDtoListMap;
+                displayCommonCodes(commonCodeData);
+                showLoading(false);
+            } else {
+                showError("공통코드 목록을 불러오는데 실패했습니다.");
+                showLoading(false);
+            }
+        } catch (error) {
+            showError("서버 연결 오류: " + error.message);
+            showLoading(false);
+        }
+    }
+    
+    // 공통코드 표시
+    function displayCommonCodes(commonCodeMap) {
+        const container = el.codeGroups;
+        
+        if (!commonCodeMap || Object.keys(commonCodeMap).length === 0) {
+            container.innerHTML = '<div class="loading">등록된 공통코드가 없습니다.</div>';
+            container.style.display = 'block';
+            return;
+        }
+        
+        let html = '';
+        
+        // 각 그룹코드별로 코드 목록 생성
+        Object.keys(commonCodeMap).forEach(groupCode => {
+            const codeList = commonCodeMap[groupCode];
+            
+            if (codeList && codeList.length > 0) {
+                html += `
+                    <div class="code-group">
+                        <div class="code-group-header">
+                            <span>그룹코드: ${groupCode}</span>
+                            <span class="code-group-code">(${getGroupCodeName(groupCode)})</span>
+                        </div>
+                        <div class="code-list">
+                `;
+                
+                codeList.forEach(code => {
+                    html += `
+                        <div class="code-item">
+                            <label>
+                                <input type="radio" name="group_${groupCode}" value="${code.code}" 
+                                       data-group="${groupCode}" data-name="${code.codeName}">
+                                ${code.codeName}
+                            </label>
+                            ${code.codeNameBrief ? `<div class="code-brief">${code.codeNameBrief}</div>` : ''}
+                        </div>
+                    `;
+                });
+                
+                html += `
+                        </div>
+                    </div>
+                `;
+            }
+        });
+        
+        container.innerHTML = html;
+        container.style.display = 'block';
+    }
+    
+    // 그룹코드명 표시용 로컬 맵 (데모용)
+    // ※ 실제 업무에서는 그룹코드명도 API 로 받거나, 관리 화면과 동일한 코드를 써야 함
+    // ※ 아래 키가 '010'/'020' 인데 요청은 '001'/'002' 라서 이름이 "알 수 없음" 으로 나올 수 있음
+    function getGroupCodeName(groupCode) {
+        const groupNames = {
+            '001': '사용자분류',
+            '002': '상태코드',
+            '010': '사용자분류',
+            '020': '상태코드'
+        };
+        return groupNames[groupCode] || '알 수 없음';
+    }
+    
+    // 선택된 값 확인
+    function getSelectedValues() {
+        const selectedValues = {};
+        let hasSelection = false;
+        
+        // 각 그룹코드별로 선택된 값 확인
+        if (commonCodeData) {
+            Object.keys(commonCodeData).forEach(groupCode => {
+                const selectedRadio = document.querySelector(`input[name="group_${groupCode}"]:checked`);
+                if (selectedRadio) {
+                    selectedValues[groupCode] = {
+                        code: selectedRadio.value,
+                        name: selectedRadio.dataset.name
+                    };
+                    hasSelection = true;
+                } else {
+                    selectedValues[groupCode] = null;
+                }
+            });
+        }
+        
+        displaySelectedValues(selectedValues, hasSelection);
+    }
+    
+    // 선택된 값 표시
+    function displaySelectedValues(selectedValues, hasSelection) {
+        const resultContainer = el.resultDisplay;
+        
+        if (!hasSelection) {
+            resultContainer.innerHTML = '<h4>선택된 값이 없습니다.</h4><p>각 그룹에서 하나씩 선택해주세요.</p>';
+            resultContainer.style.display = 'block';
+            return;
+        }
+        
+        let html = '<h4>선택된 값</h4>';
+        
+        Object.keys(selectedValues).forEach(groupCode => {
+            const value = selectedValues[groupCode];
+            if (value) {
+                html += `
+                    <div class="result-item">
+                        <strong>${getGroupCodeName(groupCode)} (${groupCode}):</strong> 
+                        ${value.name} (${value.code})
+                    </div>
+                `;
+            } else {
+                html += `
+                    <div class="result-item">
+                        <strong>${getGroupCodeName(groupCode)} (${groupCode}):</strong> 
+                        <span style="color: #dc3545;">선택되지 않음</span>
+                    </div>
+                `;
+            }
+        });
+        
+        resultContainer.innerHTML = html;
+        resultContainer.style.display = 'block';
+        
+        // 콘솔에도 출력
+        console.log('선택된 값:', selectedValues);
+    }
+    
+    // 새로고침
+    function reloadCommonCodes() {
+        loadCommonCodes();
+        el.resultDisplay.style.display = 'none';
+    }
+    
+    // 로딩 표시
+    function showLoading(show) {
+        const loadingElement = el.loadingMessage;
+        const codeGroupsElement = el.codeGroups;
+        
+        if (show) {
+            loadingElement.style.display = 'block';
+            codeGroupsElement.style.display = 'none';
+        } else {
+            loadingElement.style.display = 'none';
+        }
+    }
+    
+    // 에러 표시
+    function showError(message) {
+        const errorElement = el.errorMessage;
+        errorElement.textContent = message;
+        errorElement.style.display = 'block';
+    }
+    
+    // 에러 숨기기
+    function hideError() {
+        el.errorMessage.style.display = 'none';
+    }
+</script>
+</body>
+</html>
