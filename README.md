@@ -1,2 +1,2 @@
 # Ureca-Spring
-2026 유레카
+2026 Ureca Spring Project zip
